@@ -2,6 +2,9 @@ package com.nagy;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,18 +23,8 @@ class PersonTest {
     }
 
     @Test
-    void setFirstName() {
-        fail("This test failed.");
-    }
-
-    @Test
     void getLastName() {
         assertEquals(Person.DEFAULT_LAST_NAME, person.getLastName());
-    }
-
-    @Test
-    void setLastName() {
-        fail("This test failed.");
     }
 
     @Test
@@ -40,18 +33,8 @@ class PersonTest {
     }
 
     @Test
-    void setHeightInInches() {
-        fail("This test failed.");
-    }
-
-    @Test
     void getWeightInPounds() {
         assertEquals(Person.DEFAULT_WEIGHT_IN_POUNDS, person.getWeightInPounds(), 0.0001);
-    }
-
-    @Test
-    void setWeightInPounds() {
-        fail("This test failed.");
     }
 
     @Test
@@ -60,19 +43,8 @@ class PersonTest {
     }
 
     @Test
-    void setDateOfBirth() {
-        fail("Failed");
-
-    }
-
-    @Test
     void isAlive() {
         assertEquals(Person.DEFAULT_ALIVE, person.isAlive());
-    }
-
-    @Test
-    void setAlive() {
-        fail("This test failed.");
     }
 
     @Test
@@ -135,6 +107,106 @@ class PersonTest {
         other.setFirstName("A");
         int result = person.compareTo(other);
         assertTrue((result > 0));
+    }
+
+    @Test
+    void setFirstNameMinLettersGood() {
+//        is one char good?
+        String newFirstName = buildString(Person.MIN_FIRST_NAME_LENGTH);
+        person.setFirstName(newFirstName);
+        assertEquals(newFirstName, person.getFirstName());
+    }
+
+    @Test
+    void setFirstNameMaxLettersGood() {
+        String newFirstName = buildString(Person.MAX_LAST_NAME_LENGTH);
+        person.setFirstName(newFirstName);
+        assertEquals(newFirstName, person.getFirstName());
+    }
+
+
+    @Test
+    void setLastNameMinLettersGood() {
+        String newLastName = buildString(Person.MIN_LAST_NAME_LENGTH);
+        person.setLastName(newLastName);
+        assertEquals(newLastName, person.getLastName());
+    }
+
+    @Test
+    void setLastNameMaxLettersGood() {
+        String newLastName = buildString(Person.MAX_LAST_NAME_LENGTH);
+        person.setLastName(newLastName);
+        assertEquals(newLastName, person.getLastName());
+    }
+
+    @Test
+    void setHeightInInchesMinGood() {
+        int newHeightInInches = Person.MIN_HEIGHT;
+        person.setHeightInInches(newHeightInInches);
+        assertEquals(newHeightInInches, person.getHeightInInches());
+
+    }
+
+    @Test
+    void setHeightInInchesMaxGood() {
+        int newHeightInInches = Person.MAX_HEIGHT;
+        person.setHeightInInches(newHeightInInches);
+        assertEquals(newHeightInInches, person.getHeightInInches());
+    }
+
+    @Test
+    void setWeightInPoundsMinGood() {
+        double newWeightInPounds = Person.MIN_WEIGHT;
+        person.setWeightInPounds(newWeightInPounds);
+        assertEquals(newWeightInPounds, person.getWeightInPounds());
+    }
+
+    @Test
+    void setWeightInPoundsMaxGood() {
+        double newWeightInPounds = Person.MAX_WEIGHT;
+        person.setWeightInPounds(newWeightInPounds);
+        assertEquals(newWeightInPounds, person.getWeightInPounds());
+    }
+
+    @Test
+    void setDateOfBirthMinGood() {
+        LocalDate newDateOfBirth = Person.MIN_DATE_OF_BIRTH;
+        person.setDateOfBirth((newDateOfBirth));
+        assertEquals(newDateOfBirth, person.getDateOfBirth());
+    }
+
+    @Test
+    void setDateOfBirthInThePastGood() {
+        LocalDate newDateOfBirth = Person.MIN_DATE_OF_BIRTH.minusDays(1);
+        person.setDateOfBirth(newDateOfBirth);
+        assertEquals(newDateOfBirth, person.getDateOfBirth());
+    }
+
+    @Test
+    void setAlive() {
+        boolean newAlive = false;
+        person.setAlive(newAlive);
+        assertEquals(newAlive, person.isAlive());
+    }
+
+    @Test
+    void setDateOfBirthMaxBad() {
+        LocalDate newDateOfBirth = Person.MIN_DATE_OF_BIRTH.plusDays(1);
+        assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                person.setDateOfBirth(newDateOfBirth);
+            }
+        });
+    }
+
+    //    Helper Method to create names
+    private String buildString(int length){
+        char[] chars = new char[length];
+        for (int i = 0; i < chars.length; i++){
+            chars[i] = 'X';
+        }
+        return new String(chars);
     }
 
 }

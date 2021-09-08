@@ -18,6 +18,18 @@ public class Person implements Comparable<Person> {
     public static final LocalDate DEFAULT_DATE_OF_BIRTH = LocalDate.now();
     public static final boolean DEFAULT_ALIVE = true;
 
+//   Boundry Cases
+
+    public static final int MIN_FIRST_NAME_LENGTH = 1;
+    public static final int MAX_FIRST_NAME_LENGTH = 25;
+    public static final int MIN_LAST_NAME_LENGTH = 1;
+    public static final int MAX_LAST_NAME_LENGTH = 25;
+    public static final int MIN_HEIGHT = 0;
+    public static final int MAX_HEIGHT = 100;
+    public static final double MIN_WEIGHT = 0;
+    public static final double MAX_WEIGHT = 1000;
+    public static final LocalDate MIN_DATE_OF_BIRTH = LocalDate.now();
+
 
 
     public Person(String firstName, String lastName, int heightInInches, double weightInPounds, LocalDate dateOfBirth, boolean alive) {
@@ -66,6 +78,7 @@ public class Person implements Comparable<Person> {
     }
 
     public LocalDate getDateOfBirth() {
+        validateDateOfBirth(dateOfBirth);
         return dateOfBirth;
     }
 
@@ -102,4 +115,9 @@ public class Person implements Comparable<Person> {
         }
         return result;
     }
-}
+
+    private void validateDateOfBirth(LocalDate dateOfBirth) {
+        if (dateOfBirth.isAfter(MIN_DATE_OF_BIRTH)){
+            throw new IllegalArgumentException("The date of birth cannot be in the future");
+        }}
+    }
