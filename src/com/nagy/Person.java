@@ -18,7 +18,7 @@ public class Person implements Comparable<Person> {
     public static final LocalDate DEFAULT_DATE_OF_BIRTH = LocalDate.now();
     public static final boolean DEFAULT_ALIVE = true;
 
-//   Boundry Cases
+    //   Boundary Cases
 
     public static final int MIN_FIRST_NAME_LENGTH = 1;
     public static final int MAX_FIRST_NAME_LENGTH = 25;
@@ -30,9 +30,21 @@ public class Person implements Comparable<Person> {
     public static final double MAX_WEIGHT = 1000;
     public static final LocalDate MIN_DATE_OF_BIRTH = LocalDate.now();
 
+    // String messages
+    public static final String MSG_FIRST_NAME_NULL_ERROR = "The first name can not be null.";
+    public static final String MSG_FIRST_NAME_NONE_ERROR = "The first name is required.";
+    public static final String MSG_FIRST_NAME_LENGTH_ERROR = "The first name can not be longer than \" + MAX_FIRST_NAME_LENGTH\n" +
+            "                    + \" characters.";
+
 
 
     public Person(String firstName, String lastName, int heightInInches, double weightInPounds, LocalDate dateOfBirth, boolean alive) {
+        validateFirstName(firstName);
+        validateLastName(lastName);
+        validateHeightInInches(heightInInches);
+        validateWeightInPounds(weightInPounds);
+        validateDateOfBirth(dateOfBirth);
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.heightInInches = heightInInches;
@@ -50,6 +62,7 @@ public class Person implements Comparable<Person> {
     }
 
     public void setFirstName(String firstName) {
+        validateFirstName(firstName);
         this.firstName = firstName;
     }
 
@@ -58,6 +71,7 @@ public class Person implements Comparable<Person> {
     }
 
     public void setLastName(String lastName) {
+        validateLastName(lastName);
         this.lastName = lastName;
     }
 
@@ -66,6 +80,7 @@ public class Person implements Comparable<Person> {
     }
 
     public void setHeightInInches(int heightInInches) {
+        validateHeightInInches(heightInInches);
         this.heightInInches = heightInInches;
     }
 
@@ -74,6 +89,7 @@ public class Person implements Comparable<Person> {
     }
 
     public void setWeightInPounds(double weightInPounds) {
+        validateWeightInPounds(weightInPounds);
         this.weightInPounds = weightInPounds;
     }
 
@@ -83,6 +99,7 @@ public class Person implements Comparable<Person> {
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
+        validateDateOfBirth(dateOfBirth);
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -120,4 +137,41 @@ public class Person implements Comparable<Person> {
         if (dateOfBirth.isAfter(MIN_DATE_OF_BIRTH)){
             throw new IllegalArgumentException("The date of birth cannot be in the future");
         }}
+
+    private void validateFirstName(String firstName){
+        if (firstName == null){
+            throw new IllegalArgumentException(MSG_FIRST_NAME_NULL_ERROR);
+        } else if (firstName.equals("")){
+            throw new IllegalArgumentException(MSG_FIRST_NAME_NONE_ERROR);
+        } else if (firstName.length() > MAX_FIRST_NAME_LENGTH){
+            throw new IllegalArgumentException(MSG_FIRST_NAME_LENGTH_ERROR);
+        }
+    }
+
+    private void validateLastName(String lastName) {
+        if (lastName == null) {
+            throw new IllegalArgumentException("The last name cannot be null.");
+        } else if (lastName.length() < MIN_LAST_NAME_LENGTH) {
+            throw new IllegalArgumentException("The last name must be at least " + MIN_LAST_NAME_LENGTH + " characters in length.");
+        } else if (lastName.length() > MAX_LAST_NAME_LENGTH) {
+            throw new IllegalArgumentException("The last name cannot be more than " + MAX_FIRST_NAME_LENGTH + " characters in length.");
+        }
+    }
+    private void validateHeightInInches(int heightInInches) {
+        if (heightInInches < MIN_HEIGHT) {
+            throw new IllegalArgumentException("The height in inches cannot be less than " + MIN_HEIGHT);
+        } else if (heightInInches > MAX_HEIGHT) {
+            throw new IllegalArgumentException("The height in inches cannot be greater than " + MAX_HEIGHT);
+        }
+    }
+    private void validateWeightInPounds(double weightInPounds) {
+        if (weightInPounds < MIN_WEIGHT) {
+            throw new IllegalArgumentException("The weight in pounds cannot be less than " + MIN_WEIGHT);
+        } else if (weightInPounds > MAX_WEIGHT) {
+            throw new IllegalArgumentException("The weight in pounds cannot be greater than " + MAX_WEIGHT);
+        }
+    }
+
+
+
     }
