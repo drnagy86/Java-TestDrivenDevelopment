@@ -8,7 +8,7 @@
 - [x] getQuantitySold
 - [x] toString
 - [ ] compareToDateBeforeOther
-- [ ] compareToDateSameAsOther (in progress)
+- [ ] compareToDateSameAsOther (Time is slightly off always)
 - [ ] compareToDateAfterOther
 - [ ] setTransactionIdZeroGood
 - [ ] setTransactionIdPositiveGood
@@ -16,8 +16,8 @@
 - [ ] setSalesPersonIdPositiveGood
 - [ ] setSalesPersonIdZeroBad
 - [ ] setSalesPersonIdNegativeBad
-- [ ] setTransactionDateTimeTodayGood
-- [ ] setTransactionDateTime30DaysAgoGood
+- [x] setTransactionDateTimeTodayGood
+- [x] setTransactionDateTime30DaysAgoGood
 - [ ] setTransactionDateTime31DaysAgoBad
 - [ ] setTransactionDateTimeTomorrowBad
 - [ ] setItemIdPositiveGoo

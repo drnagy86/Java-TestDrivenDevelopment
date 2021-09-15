@@ -73,10 +73,27 @@ class SalesTransactionTest {
     @Test
     void compareToDateSameAsOther(){
         SalesTransaction other = new SalesTransaction();
+
         other.setTransactionDateTime(LocalDateTime.now());
 
         int result = sale.compareTo(other);
         assertTrue(result == 0);
+
+    }
+
+    @Test
+    void setTransactionDateTimeTodayGood(){
+        LocalDateTime newDay = SalesTransaction.MIN_TRANSACTIONDATE;
+        sale.setTransactionDateTime(newDay);
+        assertEquals(newDay, sale.getTransactionDateTime());
+
+    }
+
+    @Test
+    void setTransactionDateTime30DaysAgoGood(){
+        LocalDateTime newDay = SalesTransaction.MAX_TRANSACTIONDATE;
+        sale.setTransactionDateTime(newDay);
+        assertEquals(newDay, sale.getTransactionDateTime());
 
     }
 
