@@ -3,7 +3,7 @@ package com.nagy;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class SalesTransaction {
+public class SalesTransaction implements Comparable<SalesTransaction> {
 
     private int transactionID;
     private int salesPersonID;
@@ -92,6 +92,19 @@ public class SalesTransaction {
         this.quantitySold = positiveIntInput(quantitySold);
     }
 
+
+    @Override
+    public String toString() {
+        return "SalesTransaction{" +
+                "transactionID=" + transactionID +
+                ", salesPersonID=" + salesPersonID +
+                ", transactionDateTime=" + transactionDateTime +
+                ", itemID=" + itemID +
+                ", unitPrice=" + unitPrice +
+                ", quantitySold=" + quantitySold +
+                '}';
+    }
+
     //    start private methods
     private int positiveIntInput(int input) {
         if (input < 0){
@@ -105,6 +118,7 @@ public class SalesTransaction {
             transactionDateTime.isBefore(MAX_TRANSACTIONDATE)){
             throw new IllegalArgumentException("The date cannot be in the future or more than 30 days in the past.");
         }
+
         return transactionDateTime;
 
     }
@@ -118,5 +132,12 @@ public class SalesTransaction {
         }
 
         return  unitPrice;
+    }
+
+    @Override
+    public int compareTo(SalesTransaction o) {
+        int result = this.transactionDateTime.compareTo(o.transactionDateTime);
+
+        return result;
     }
 }

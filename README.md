@@ -1,14 +1,14 @@
-#Tests to do:
+# Tests to do:
 
-- [ ] getTransactionId
-- [ ] getSalesPersonId
-- [ ] getTransactionDateTime
-- [ ] getItemId
-- [ ] getUnitPrice
-- [ ] getQuantitySold
-- [ ] toString
+- [x] getTransactionId
+- [x] getSalesPersonId
+- [x] getTransactionDateTime
+- [x] getItemId
+- [x] getUnitPrice
+- [x] getQuantitySold
+- [x] toString
 - [ ] compareToDateBeforeOther
-- [ ] compareToDateSameAsOther
+- [ ] compareToDateSameAsOther (in progress)
 - [ ] compareToDateAfterOther
 - [ ] setTransactionIdZeroGood
 - [ ] setTransactionIdPositiveGood

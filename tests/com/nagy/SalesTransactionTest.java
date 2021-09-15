@@ -1,6 +1,10 @@
+package com.nagy;
+
 import com.nagy.SalesTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,11 +23,6 @@ class SalesTransactionTest {
         assertEquals(SalesTransaction.DEFAULT_transactionID, sale.getTransactionID());
     }
 
-    @Test
-    void setTransactionID() {
-
-        fail();
-    }
 
     @Test
     void getSalesPersonID() {
@@ -32,58 +31,53 @@ class SalesTransactionTest {
     }
 
     @Test
-    void setSalesPersonID() {
-
-        fail();
-    }
-
-    @Test
     void getTransactionDateTime() {
 
-        fail();
-    }
-
-    @Test
-    void setTransactionDateTime() {
-
-        fail();
+        assertEquals(SalesTransaction.DEFAULT_transactionDateTime, sale.getTransactionDateTime());
     }
 
     @Test
     void getItemID() {
 
-        fail();
-    }
-
-    @Test
-    void setItemID() {
-
-        fail();
+        assertEquals(SalesTransaction.DEFAULT_itemID, sale.getItemID());
     }
 
     @Test
     void getUnitPrice() {
 
-        fail();
-    }
-
-    @Test
-    void setUnitPrice() {
-
-        fail();
+        assertEquals(SalesTransaction.DEFAULT_unitPrice, sale.getUnitPrice());
     }
 
     @Test
     void getQuantitySold() {
 
-        fail();
+        assertEquals(SalesTransaction.DEFAULT_quanitySold, sale.getQuantitySold());
     }
 
     @Test
-    void setQuantitySold() {
+    void testToString(){
+        String exepected =
+                "SalesTransaction{" +
+                "transactionID=" + SalesTransaction.DEFAULT_transactionID +
+                ", salesPersonID=" + SalesTransaction.DEFAULT_salesPersonID +
+                ", transactionDateTime=" + SalesTransaction.DEFAULT_transactionDateTime +
+                ", itemID=" + SalesTransaction.DEFAULT_itemID +
+                ", unitPrice=" + SalesTransaction.DEFAULT_unitPrice +
+                ", quantitySold=" + SalesTransaction.DEFAULT_quanitySold +
+                '}';
 
-        fail();
+        assertEquals(exepected, sale.toString());
+
     }
 
+    @Test
+    void compareToDateSameAsOther(){
+        SalesTransaction other = new SalesTransaction();
+        other.setTransactionDateTime(LocalDateTime.now());
+
+        int result = sale.compareTo(other);
+        assertTrue(result == 0);
+
+    }
 
 }
