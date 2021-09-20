@@ -19,21 +19,35 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     public static final LocalDateTime DEFAULT_transactionDateTime = LocalDateTime.now();
     public static final int DEFAULT_itemID = 2;
     public static final BigDecimal DEFAULT_unitPrice = new BigDecimal("9.99");
-    public static final int DEFAULT_quanitySold = 3;
+    public static final int DEFAULT_quantitySold = 3;
 
     //   Boundary Cases
-
+    // Truncated the time to seconds so that it would test in a more realistic way.
+    // Time only accurate to seconds
     public static final LocalDateTime MIN_TRANSACTIONDATE = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-    public static final LocalDateTime MAX_TRANSACTIONDATE = LocalDateTime.now().minusDays(30);
+    public static final LocalDateTime MAX_TRANSACTIONDATE = LocalDateTime.now().minusDays(30).truncatedTo(ChronoUnit.SECONDS);
+
+    // Messages
+    public static final String MSG_NEGATIVE_NUMBER = "This number must be positive.";
+    public static final String MSG_ZERO = "This number can not be zero(0).";
+    public static final String MSG_31_DAYS_AGO = "The date can not be more than 31 days ago.";
+    public static final String MSG_FUTURE_DATE = "The date can not be in the future.";
+    public static final String MSG_NEGATIVE_DOLLARS = "The price can not be less than $0.00";
+    public static final String MSG_TOO_MANY_DIGITS = "Too many digits on the price.";
 
 
     // Constructors
-
     public SalesTransaction(){
-        this(DEFAULT_transactionID, DEFAULT_salesPersonID, DEFAULT_transactionDateTime, DEFAULT_itemID, DEFAULT_unitPrice, DEFAULT_quanitySold);
+        this(DEFAULT_transactionID, DEFAULT_salesPersonID, DEFAULT_transactionDateTime, DEFAULT_itemID, DEFAULT_unitPrice, DEFAULT_quantitySold);
     }
 
     public SalesTransaction(int transactionID, int salesPersonID, LocalDateTime transactionDateTime, int itemID, BigDecimal unitPrice, int quantitySold) {
+
+        validatePositiveIntInput(transactionID, salesPersonID, itemID, quantitySold);
+        noZeroIntInput(salesPersonID,itemID,quantitySold);
+        validateTransactionDateTime(transactionDateTime);
+        validateBigDecimal(unitPrice);
+
         this.transactionID = transactionID;
         this.salesPersonID = salesPersonID;
         this.transactionDateTime = transactionDateTime;
@@ -48,7 +62,8 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     }
 
     public void setTransactionID(int transactionID) {
-        this.transactionID = positiveIntInput(transactionID);
+        validatePositiveIntInput(transactionID);
+        this.transactionID = transactionID;
     }
 
     public int getSalesPersonID() {
@@ -56,8 +71,9 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     }
 
     public void setSalesPersonID(int salesPersonID) {
-
-        this.salesPersonID = positiveIntInput(salesPersonID);
+        noZeroIntInput(salesPersonID);
+        validatePositiveIntInput(salesPersonID);
+        this.salesPersonID = salesPersonID;
     }
 
     public LocalDateTime getTransactionDateTime() {
@@ -73,7 +89,9 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     }
 
     public void setItemID(int itemID) {
-        this.itemID = positiveIntInput(itemID);
+        noZeroIntInput(itemID);
+        validatePositiveIntInput(itemID);
+        this.itemID = itemID;
     }
 
     public BigDecimal getUnitPrice() {
@@ -90,9 +108,10 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     }
 
     public void setQuantitySold(int quantitySold) {
-        this.quantitySold = positiveIntInput(quantitySold);
+        noZeroIntInput(quantitySold);
+        validatePositiveIntInput(quantitySold);
+        this.quantitySold = quantitySold;
     }
-
 
     @Override
     public String toString() {
@@ -107,19 +126,30 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     }
 
     //    start private methods
-    private int positiveIntInput(int input) {
-        if (input < 0){
-            throw new IllegalArgumentException("This input must be a positive number");
+    private void validatePositiveIntInput(int ... inputList) {
+        for (int input:inputList) {
+            if (input < 0){
+                throw new IllegalArgumentException(MSG_NEGATIVE_NUMBER);
+            }
         }
-        return input;
+    }
+
+    private void noZeroIntInput(int ... inputList){
+        for(int input:inputList){
+            if (input == 0){
+                throw new IllegalArgumentException(MSG_ZERO);
+            }
+        }
     }
 
     private LocalDateTime validateTransactionDateTime(LocalDateTime transactionDateTime) {
         transactionDateTime = transactionDateTime.truncatedTo(ChronoUnit.SECONDS);
 
-        if (transactionDateTime.isAfter(MIN_TRANSACTIONDATE) ||
-            transactionDateTime.isBefore(MAX_TRANSACTIONDATE)){
-            throw new IllegalArgumentException("The date cannot be in the future or more than 30 days in the past.");
+        if (transactionDateTime.isBefore(MAX_TRANSACTIONDATE)){
+            throw  new IllegalArgumentException(MSG_31_DAYS_AGO);
+        }
+        if (transactionDateTime.isAfter(MIN_TRANSACTIONDATE)){
+            throw new IllegalArgumentException(MSG_FUTURE_DATE);
         }
 
         return transactionDateTime;
@@ -128,10 +158,10 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
 
     private BigDecimal validateBigDecimal( BigDecimal unitPrice){
         if(unitPrice.signum() == -1){
-            throw new IllegalArgumentException("Unit Price must be a positive number.");
+            throw new IllegalArgumentException(MSG_NEGATIVE_DOLLARS);
         }
         if (unitPrice.scale() > 2){
-            throw new IllegalArgumentException("Unit Price can not have more than two decimals.");
+            throw new IllegalArgumentException(MSG_TOO_MANY_DIGITS);
         }
 
         return  unitPrice;
@@ -140,7 +170,6 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     @Override
     public int compareTo(SalesTransaction o) {
         int result = this.transactionDateTime.compareTo(o.transactionDateTime);
-
         return result;
     }
 }
