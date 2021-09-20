@@ -6,6 +6,8 @@ import java.time.temporal.ChronoUnit;
 
 public class SalesTransaction implements Comparable<SalesTransaction> {
 
+
+
     private int transactionID;
     private int salesPersonID;
     private LocalDateTime transactionDateTime;
@@ -22,10 +24,13 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     public static final int DEFAULT_quantitySold = 3;
 
     //   Boundary Cases
-    // Truncated the time to seconds so that it would test in a more realistic way.
+    // Truncated the time to seconds for testing. Also didn't see the need to be more precise
     // Time only accurate to seconds
-    public static final LocalDateTime MIN_TRANSACTIONDATE = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-    public static final LocalDateTime MAX_TRANSACTIONDATE = LocalDateTime.now().minusDays(30).truncatedTo(ChronoUnit.SECONDS);
+    //public static final LocalDateTime MIN_TRANSACTION_DATE = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    public static final LocalDateTime MAX_TRANSACTION_DATE = LocalDateTime.now().minusDays(30).truncatedTo(ChronoUnit.SECONDS);
+
+    // continuing issues with date. This static variable is updated with a method anytime a date is called
+    public static LocalDateTime Min_Transaction_Date_Realtime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
     // Messages
     public static final String MSG_NEGATIVE_NUMBER = "This number must be positive.";
@@ -45,6 +50,7 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
 
         validatePositiveIntInput(transactionID, salesPersonID, itemID, quantitySold);
         noZeroIntInput(salesPersonID,itemID,quantitySold);
+        updateCurrentTime();
         validateTransactionDateTime(transactionDateTime);
         validateBigDecimal(unitPrice);
 
@@ -126,6 +132,11 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
                 '}';
     }
 
+    public static LocalDateTime getMin_Transaction_Date_Realtime() {
+        updateCurrentTime();
+        return Min_Transaction_Date_Realtime;
+    }
+
     //    start private methods
     private void validatePositiveIntInput(int ... inputList) {
         for (int input:inputList) {
@@ -144,12 +155,13 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     }
 
     private LocalDateTime validateTransactionDateTime(LocalDateTime transactionDateTime) {
+        updateCurrentTime();
         transactionDateTime = transactionDateTime.truncatedTo(ChronoUnit.SECONDS);
 
-        if (transactionDateTime.isBefore(MAX_TRANSACTIONDATE)){
+        if (transactionDateTime.isBefore(MAX_TRANSACTION_DATE)){
             throw  new IllegalArgumentException(MSG_31_DAYS_AGO);
         }
-        if (transactionDateTime.isAfter(MIN_TRANSACTIONDATE)){
+        if (transactionDateTime.isAfter(getMin_Transaction_Date_Realtime())){
             throw new IllegalArgumentException(MSG_FUTURE_DATE);
         }
 
@@ -166,6 +178,10 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
         }
 
         return  unitPrice;
+    }
+
+    private static void updateCurrentTime(){
+        Min_Transaction_Date_Realtime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     }
 
     @Override

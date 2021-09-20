@@ -69,12 +69,13 @@ class SalesTransactionTest {
     }
     @Test
     void compareToDateBeforeOther(){
+        // setting today first because the min date is updated when a new object is created.
+        // So, the default time setting shouldn't case an error
+        LocalDateTime today = LocalDateTime.now();
         SalesTransaction other = new SalesTransaction();
 
-        // update localtime so that minute differences in time aren't caught
-        // accurate to the seconds
-        sale.setTransactionDateTime(LocalDateTime.now().minusDays(10));
-        other.setTransactionDateTime(LocalDateTime.now());
+        sale.setTransactionDateTime(today.minusDays(10));
+        other.setTransactionDateTime(today);
         boolean result = sale.getTransactionDateTime().isBefore(other.getTransactionDateTime());
 
         assertEquals(true, result);
@@ -82,12 +83,11 @@ class SalesTransactionTest {
 
     @Test
     void compareToDateSameAsOther(){
+        LocalDateTime today = LocalDateTime.now();
         SalesTransaction other = new SalesTransaction();
 
-        // update localtime so that minute differences in time aren't caught
-        // accurate to the seconds
-        sale.setTransactionDateTime(LocalDateTime.now());
-        other.setTransactionDateTime(LocalDateTime.now());
+        sale.setTransactionDateTime(today);
+        other.setTransactionDateTime(today);
         boolean result = sale.getTransactionDateTime().isEqual(other.getTransactionDateTime());
 
         assertEquals(true, result);
@@ -95,12 +95,12 @@ class SalesTransactionTest {
 
     @Test
     void compareToDateAfterOther(){
+
+        LocalDateTime today = LocalDateTime.now();
         SalesTransaction other = new SalesTransaction();
 
-        // update localtime so that minute differences in time aren't caught
-        // accurate to the seconds
-        sale.setTransactionDateTime(LocalDateTime.now());
-        other.setTransactionDateTime(LocalDateTime.now().minusDays(10));
+        sale.setTransactionDateTime(today);
+        other.setTransactionDateTime(today.minusDays(10));
         boolean result = sale.getTransactionDateTime().isAfter(other.getTransactionDateTime());
 
         assertEquals(true, result);
@@ -168,14 +168,14 @@ class SalesTransactionTest {
 
     @Test
     void setTransactionDateTimeTodayGood(){
-        LocalDateTime newDay = SalesTransaction.MIN_TRANSACTIONDATE;
+        LocalDateTime newDay = SalesTransaction.getMin_Transaction_Date_Realtime();
         sale.setTransactionDateTime(newDay);
         assertEquals(newDay, sale.getTransactionDateTime());
     }
 
     @Test
     void setTransactionDateTime30DaysAgoGood(){
-        LocalDateTime newDay = SalesTransaction.MAX_TRANSACTIONDATE;
+        LocalDateTime newDay = SalesTransaction.MAX_TRANSACTION_DATE;
         sale.setTransactionDateTime(newDay);
         assertEquals(newDay, sale.getTransactionDateTime());
     }
