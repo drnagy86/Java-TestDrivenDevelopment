@@ -7,25 +7,26 @@
 - [x] getUnitPrice
 - [x] getQuantitySold
 - [x] toString
-- [ ] compareToDateBeforeOther
-- [ ] compareToDateSameAsOther (Time is slightly off always)
-- [ ] compareToDateAfterOther
-- [ ] setTransactionIdZeroGood
-- [ ] setTransactionIdPositiveGood
-- [ ] setTransactionIdNegativeBad
-- [ ] setSalesPersonIdPositiveGood
-- [ ] setSalesPersonIdZeroBad
-- [ ] setSalesPersonIdNegativeBad
+- [x] compareToDateBeforeOther
+- [x] compareToDateSameAsOther (Time is slightly off so truncated time to seconds)
+- [x] compareToDateAfterOther
+- [x] setTransactionIdZeroGood
+- [x] setTransactionIdPositiveGood
+- [x] setTransactionIdNegativeBad
+- [x] setSalesPersonIdPositiveGood
+- [x] setSalesPersonIdZeroBad
+- [x] setSalesPersonIdNegativeBad
 - [x] setTransactionDateTimeTodayGood
 - [x] setTransactionDateTime30DaysAgoGood
-- [ ] setTransactionDateTime31DaysAgoBad
-- [ ] setTransactionDateTimeTomorrowBad
-- [ ] setItemIdPositiveGoo
-- [ ] setItemIdZeroBad
-- [ ] setItemIdNegativeBad
-- [ ] setUnitPricePostiveGood
-- [ ] setUnitPriceZeroGood
-- [ ] setUnitPriceNegativeBad
-- [ ] setQuantitySoldPositiveGood
-- [ ] setQuantitySoldZeroBad
-- [ ] setQuantitySoldNegativeBad
+- [x] setTransactionDateTime31DaysAgoBad
+- [x] setTransactionDateTimeTomorrowBad
+- [x] setItemIdPositiveGood
+- [x] setItemIdZeroBad
+- [x] setItemIdNegativeBad
+- [x] setUnitPricePositiveGood
+- [x] setUnitPriceZeroGood
+- [x] setUnitPriceNegativeBad
+- [x] setUnitPriceDigitsBad (added this one)
+- [x] setQuantitySoldPositiveGood
+- [x] setQuantitySoldZeroBad
+- [x] setQuantitySoldNegativeBad

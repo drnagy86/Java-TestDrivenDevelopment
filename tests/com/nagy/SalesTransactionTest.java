@@ -1,9 +1,10 @@
 package com.nagy;
 
-import com.nagy.SalesTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,7 +52,7 @@ class SalesTransactionTest {
     @Test
     void getQuantitySold() {
 
-        assertEquals(SalesTransaction.DEFAULT_quanitySold, sale.getQuantitySold());
+        assertEquals(SalesTransaction.DEFAULT_quantitySold, sale.getQuantitySold());
     }
 
     @Test
@@ -63,11 +64,23 @@ class SalesTransactionTest {
                 ", transactionDateTime=" + SalesTransaction.DEFAULT_transactionDateTime +
                 ", itemID=" + SalesTransaction.DEFAULT_itemID +
                 ", unitPrice=" + SalesTransaction.DEFAULT_unitPrice +
-                ", quantitySold=" + SalesTransaction.DEFAULT_quanitySold +
+                ", quantitySold=" + SalesTransaction.DEFAULT_quantitySold +
                 '}';
 
         assertEquals(exepected, sale.toString());
 
+    }
+    @Test
+    void compareToDateBeforeOther(){
+        SalesTransaction other = new SalesTransaction();
+
+        // update localtime so that minute differences in time aren't caught
+        // accurate to the seconds
+        sale.setTransactionDateTime(LocalDateTime.now().minusDays(10));
+        other.setTransactionDateTime(LocalDateTime.now());
+        boolean result = sale.getTransactionDateTime().isBefore(other.getTransactionDateTime());
+
+        assertEquals(true, result);
     }
 
     @Test
@@ -78,12 +91,82 @@ class SalesTransactionTest {
         // accurate to the seconds
         sale.setTransactionDateTime(LocalDateTime.now());
         other.setTransactionDateTime(LocalDateTime.now());
-
-
-
         boolean result = sale.getTransactionDateTime().isEqual(other.getTransactionDateTime());
 
         assertEquals(true, result);
+    }
+
+    @Test
+    void compareToDateAfterOther(){
+        SalesTransaction other = new SalesTransaction();
+
+        // update localtime so that minute differences in time aren't caught
+        // accurate to the seconds
+        sale.setTransactionDateTime(LocalDateTime.now());
+        other.setTransactionDateTime(LocalDateTime.now().minusDays(10));
+        boolean result = sale.getTransactionDateTime().isAfter(other.getTransactionDateTime());
+
+        assertEquals(true, result);
+    }
+
+    @Test
+    void setTransactionIdZeroGood() {
+        sale.setTransactionID(0);
+        assertEquals(0,sale.getTransactionID());
+
+    }
+
+    @Test
+    void setTransactionIdPositiveGood() {
+        sale.setTransactionID(666);
+        assertEquals(666, sale.getTransactionID());
+    }
+
+    @Test
+    void setTransactionIdNegativeBad() {
+
+        int newTransactionID = -1;
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setTransactionID(newTransactionID);
+            }
+        });
+        String expected = SalesTransaction.MSG_NEGATIVE_NUMBER;
+        String actual = exception.getMessage();
+        assertEquals(expected,actual);
+    }
+
+    @Test
+    void setSalesPersonIdPositiveGood() {
+        sale.setSalesPersonID(666);
+        assertEquals(666,sale.getSalesPersonID());
+    }
+
+    @Test
+    void setSalesPersonIdZeroBad() {
+        int newSalesPersonId = 0;
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setSalesPersonID(newSalesPersonId);
+            }
+        });
+        String expected =SalesTransaction.MSG_ZERO;
+        String actual = exception.getMessage();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void setSalesPersonIdNegativeBad() {
+        int newSalesPersonID = -1;
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setSalesPersonID(newSalesPersonID);
+            }
+        });
+        assertEquals(SalesTransaction.MSG_NEGATIVE_NUMBER, exception.getMessage());
     }
 
     @Test
@@ -91,7 +174,6 @@ class SalesTransactionTest {
         LocalDateTime newDay = SalesTransaction.MIN_TRANSACTIONDATE;
         sale.setTransactionDateTime(newDay);
         assertEquals(newDay, sale.getTransactionDateTime());
-
     }
 
     @Test
@@ -99,7 +181,137 @@ class SalesTransactionTest {
         LocalDateTime newDay = SalesTransaction.MAX_TRANSACTIONDATE;
         sale.setTransactionDateTime(newDay);
         assertEquals(newDay, sale.getTransactionDateTime());
-
     }
+
+    @Test
+    void setTransactionDateTime31DaysAgoBad() {
+        LocalDateTime newDateTime = LocalDateTime.now().minusDays(31);
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setTransactionDateTime(newDateTime);
+            }
+        });
+        String expected = SalesTransaction.MSG_31_DAYS_AGO;
+        String actual = exception.getMessage();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void setTransactionDateTimeTomorrowBad() {
+        LocalDateTime newDateTime = LocalDateTime.now().plusDays(1);
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setTransactionDateTime(newDateTime);
+            }
+        });
+        assertEquals(SalesTransaction.MSG_FUTURE_DATE, exception.getMessage());
+    }
+
+    @Test
+    void setItemIdPositiveGood() {
+        sale.setItemID(1);
+        assertEquals(1, sale.getItemID());
+    }
+
+    @Test
+    void setItemIdZeroBad() {
+        int newItemID = 0;
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setSalesPersonID(newItemID);
+            }
+        });
+        String expected =SalesTransaction.MSG_ZERO;
+        String actual = exception.getMessage();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void setItemIdNegativeBad() {
+        int newItemID = -1;
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setSalesPersonID(newItemID);
+            }
+        });
+        assertEquals(SalesTransaction.MSG_NEGATIVE_NUMBER, exception.getMessage());
+    }
+
+    @Test
+    void setUnitPricePositiveGood() {
+        BigDecimal newUnitPrice = new BigDecimal("22.22");
+        sale.setUnitPrice(newUnitPrice);
+        assertEquals(newUnitPrice, sale.getUnitPrice());
+    }
+
+    @Test
+    void setUnitPriceZeroGood() {
+        BigDecimal newUnitPrice = new BigDecimal("0.00");
+        sale.setUnitPrice(newUnitPrice);
+        assertEquals(newUnitPrice, sale.getUnitPrice());
+    }
+
+    @Test
+    void setUnitPriceNegativeBad() {
+        BigDecimal newUnitPrice = new BigDecimal("-1.11");
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setUnitPrice(newUnitPrice);
+            }
+        });
+        String expected = SalesTransaction.MSG_NEGATIVE_DOLLARS;
+        String actual = exception.getMessage();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void setUnitPriceDigitsBad() {
+        BigDecimal newUnitPrice = new BigDecimal("1.111");
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setUnitPrice(newUnitPrice);
+            }
+        });
+        assertEquals(SalesTransaction.MSG_TOO_MANY_DIGITS, exception.getMessage());
+    }
+
+    @Test
+    void setQuantitySoldPositiveGood() {
+        sale.setQuantitySold(4);
+        assertEquals(4, sale.getQuantitySold());
+    }
+
+    @Test
+    void setQuantitySoldZeroBad() {
+        int newQuantity = 0;
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setSalesPersonID(newQuantity);
+            }
+        });
+        String expected =SalesTransaction.MSG_ZERO;
+        String actual = exception.getMessage();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void setQuantitySoldNegativeBad() {
+        int newQuantity = -1;
+        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                sale.setSalesPersonID(newQuantity);
+            }
+        });
+        assertEquals(SalesTransaction.MSG_NEGATIVE_NUMBER, exception.getMessage());
+    }
+
 
 }
