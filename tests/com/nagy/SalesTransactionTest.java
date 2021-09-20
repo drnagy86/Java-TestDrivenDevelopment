@@ -74,11 +74,16 @@ class SalesTransactionTest {
     void compareToDateSameAsOther(){
         SalesTransaction other = new SalesTransaction();
 
+        // update localtime so that minute differences in time aren't caught
+        // accurate to the seconds
+        sale.setTransactionDateTime(LocalDateTime.now());
         other.setTransactionDateTime(LocalDateTime.now());
 
-        int result = sale.compareTo(other);
-        assertTrue(result == 0);
 
+
+        boolean result = sale.getTransactionDateTime().isEqual(other.getTransactionDateTime());
+
+        assertEquals(true, result);
     }
 
     @Test

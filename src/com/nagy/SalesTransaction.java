@@ -2,6 +2,7 @@ package com.nagy;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class SalesTransaction implements Comparable<SalesTransaction> {
 
@@ -22,7 +23,7 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
 
     //   Boundary Cases
 
-    public static final LocalDateTime MIN_TRANSACTIONDATE = LocalDateTime.now();
+    public static final LocalDateTime MIN_TRANSACTIONDATE = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     public static final LocalDateTime MAX_TRANSACTIONDATE = LocalDateTime.now().minusDays(30);
 
 
@@ -114,6 +115,8 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
     }
 
     private LocalDateTime validateTransactionDateTime(LocalDateTime transactionDateTime) {
+        transactionDateTime = transactionDateTime.truncatedTo(ChronoUnit.SECONDS);
+
         if (transactionDateTime.isAfter(MIN_TRANSACTIONDATE) ||
             transactionDateTime.isBefore(MAX_TRANSACTIONDATE)){
             throw new IllegalArgumentException("The date cannot be in the future or more than 30 days in the past.");
