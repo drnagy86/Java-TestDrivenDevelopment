@@ -27,19 +27,16 @@ class SalesTransactionTest {
 
     @Test
     void getSalesPersonID() {
-
         assertEquals(SalesTransaction.DEFAULT_salesPersonID, sale.getSalesPersonID());
     }
 
     @Test
     void getTransactionDateTime() {
-
         assertEquals(SalesTransaction.DEFAULT_transactionDateTime, sale.getTransactionDateTime());
     }
 
     @Test
     void getItemID() {
-
         assertEquals(SalesTransaction.DEFAULT_itemID, sale.getItemID());
     }
 

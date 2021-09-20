@@ -48,6 +48,7 @@ public class SalesTransaction implements Comparable<SalesTransaction> {
         validateTransactionDateTime(transactionDateTime);
         validateBigDecimal(unitPrice);
 
+
         this.transactionID = transactionID;
         this.salesPersonID = salesPersonID;
         this.transactionDateTime = transactionDateTime;
