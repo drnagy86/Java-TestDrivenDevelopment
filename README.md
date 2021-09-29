@@ -5,7 +5,7 @@ In "src" folder, Person.js is the in class work we did. SaleItem.js is an exampl
 
 In the "tests" folder, PersonTest.js is the in class work and SaleItem.js is an example. SalesTransactionTest.js is what I wrote.
 
-##Reflection
+## Reflection
 
 I didn't know anything about test driven development. I found that the process was a little tricky at first then extremely straight forward.
 
