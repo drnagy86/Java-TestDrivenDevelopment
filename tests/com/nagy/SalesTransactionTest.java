@@ -123,14 +123,17 @@ class SalesTransactionTest {
     void setTransactionIdNegativeBad() {
 
         int newTransactionID = -1;
-        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                sale.setTransactionID(newTransactionID);
-            }
-        });
+//        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+//            @Override
+//            public void execute() throws Throwable {
+//                sale.setTransactionID(newTransactionID);
+//            }
+//        });
+//
+        Exception exception1 = assertThrows(IllegalArgumentException.class, () -> sale.setTransactionID(newTransactionID));
+
         String expected = SalesTransaction.MSG_NEGATIVE_NUMBER;
-        String actual = exception.getMessage();
+        String actual = exception1.getMessage();
         assertEquals(expected,actual);
     }
 
@@ -143,14 +146,17 @@ class SalesTransactionTest {
     @Test
     void setSalesPersonIdZeroBad() {
         int newSalesPersonId = 0;
-        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                sale.setSalesPersonID(newSalesPersonId);
-            }
-        });
+//        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+//            @Override
+//            public void execute() throws Throwable {
+//                sale.setSalesPersonID(newSalesPersonId);
+//            }
+//        });
+
+        Exception exception1 = assertThrows(IllegalArgumentException.class, () -> sale.setSalesPersonID(newSalesPersonId));
+
         String expected =SalesTransaction.MSG_ZERO;
-        String actual = exception.getMessage();
+        String actual = exception1.getMessage();
         assertEquals(expected, actual);
     }
 
