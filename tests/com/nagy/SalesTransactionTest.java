@@ -197,13 +197,19 @@ class SalesTransactionTest {
     @Test
     void setTransactionDateTimeTomorrowBad() {
         LocalDateTime newDateTime = LocalDateTime.now().plusDays(1);
-        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                sale.setTransactionDateTime(newDateTime);
-            }
-        });
-        assertEquals(SalesTransaction.MSG_FUTURE_DATE, exception.getMessage());
+//        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+//            @Override
+//            public void execute() throws Throwable {
+//                sale.setTransactionDateTime(newDateTime);
+//            }
+//        });
+
+//        Executable result = () -> sale.setTransactionDateTime(newDateTime);
+//        Exception exception1 = assertThrows(IllegalArgumentException.class, result.execute();)
+
+        Exception exception1 = assertThrows(IllegalArgumentException.class, () -> sale.setTransactionDateTime(newDateTime));
+
+        assertEquals(SalesTransaction.MSG_FUTURE_DATE, exception1.getMessage());
     }
 
     @Test

@@ -154,14 +154,17 @@ class PersonTest {
     @Test
     void setFirstNameNoneBad() {
         String newFirstName = "";
-        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+//        Exception exception = assertThrows(IllegalArgumentException.class, new Executable() {
+//
+//            public void execute() throws Throwable {
+//                person.setFirstName(newFirstName);
+//            }
+//        });
 
-            public void execute() throws Throwable {
-                person.setFirstName(newFirstName);
-            }
-        });
+        Exception exception1 = assertThrows(IllegalArgumentException.class, () -> person.setFirstName(newFirstName));
+
         String expected = Person.MSG_FIRST_NAME_NONE_ERROR;
-        String actual = exception.getMessage();
+        String actual = exception1.getMessage();
         assertEquals(expected,actual);
     }
 
